@@ -73,6 +73,21 @@ class binary_tree:
 
 		if curr_node.rightChild:
 			self._print_tree(curr_node.rightChild)
+	
+	def find_element(self, value):
+		if self.root==None:
+			return False
+		else:
+			return self._find_element(self.root, value)
+
+	def _find_element(self, current_node, value):
+		if current_node.value==value:
+			return True
+		elif value < current_node.value and current_node.left:
+			return self._find_element(current_node.left, value)
+		elif value > current_node.value and current_node.right:
+			return self._find_element(current_node.right, value)
+		return False
 
 
 def insert_treeData(root):
