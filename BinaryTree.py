@@ -7,6 +7,7 @@ class node:
 		self.value=value
 		self.leftChild= None
 		self.rightChild= None
+		self.parent= None
 
 
 #Define another class that take care of all the node operations.
@@ -43,11 +44,13 @@ class binary_tree:
 		if value < curr_node.value:
 			if curr_node.leftChild== None:
 				curr_node.leftChild= node(value)
+				curr_node.leftChild.parent = curr_node
 			else:
 				self._insert_value(value,curr_node.leftChild)
 		elif value > curr_node.value:
 			if curr_node.rightChild == None:
 				curr_node.rightChild = node(value)
+				curr_node.rightChild.parent= curr_node
 			else:
 				self._insert_value(value, curr_node.rightChild)
 		else:
@@ -111,7 +114,7 @@ class binary_tree:
 		# First we check if the tree is empty by checking root node. If it is not, then we call private function.
 		# When we call the provate function then we send current node and the value to be searched to the private function.
 		if self.root== None:
-			print("Tree is empty.")
+			return None
 		else:
 			return self._find_element(self.root, value)
 
@@ -120,14 +123,72 @@ class binary_tree:
 		# If it is greater, traverse right. If at any point we encounter None in the child node, return false.
 
 		if current_node.value == value:
-			return True
+			return current_node
 		elif value < current_node.value and current_node.leftChild:
 			return self._find_element(current_node.leftChild, value)
 		elif value > current_node.value and current_node.rightChild:
 			return self._find_element(current_node.rightChild, value)
 		return False
 
+	# This is the method to get the value of the root node. 
+	def get_root_node(self):
+		if self.root== None:
+			return "Tree is empty"
+		else:
+			return self.root.value
 
+	# This is the function to delete a particular node. As of now this is just written to delete the leaf node.
+	def delete_node(self, value):
+		# First find if the node even exists. If it does, then return True or False.
+		current_node= self.find_element(value)
+		if current_node:
+			# Get the parent of the node which we want to delete node.  
+			parent_node= current_node.parent
+			# Once you have the parent the there are below 4 conditions to be checked.
+			# 1- The node is leaf node. In this case, we simply put parents left/ right child to none.
+			# 2- The node has only one child. In this case, we point parents left/ right child to the child of current node.
+			# 3- The node has both children. In this case we follow recursive approach.
+			#    The appraoch we use is, we save the value of current nodes right child in temp variable. 
+			#    Then we apply recursive fucntion on the value of current node's right child. 
+			#    At the end, we replace current nodes value by temp variable.
+			if not current_node.leftChild and not current_node.rightChild:
+				if current_node.value< parent_node.value:
+					parent_node.leftChild= None
+				else:
+					parent_node.rightChild=None
+				return
+			elif current_node.leftChild!=None and current_node.rightChild==None:
+				if parent_node==None:
+					self.root= current_node.leftChild
+					current_node.leftChild=None
+				else:
+					if current_node.value < parent_node.value:
+						parent_node.leftChild= current_node.leftChild
+					else:
+						parent_node.rightChild= current_node.leftChild
+					current_node.leftChild= None
+				return
+			elif current_node.leftChild==None and current_node.rightChild!=None:
+				if parent_node== None:
+					self.root= current_node.rightChild
+					current_node.rightChild= None
+				else:
+					if current_node.value< parent_node.value:
+						parent_node.leftChild= current_node.rightChild
+					else:
+						parent_node.rightChild= current_node.rightChild
+					current_node.rightChild=None
+				return
+			elif current_node.leftChild and current_node.rightChild:
+				replace_value= current_node.rightChild.value
+				self.delete_node(current_node.rightChild.value)
+				current_node.value= replace_value
+				return
+		else:
+			print("Element is absent.")
+
+
+# This is the helper function to create a big tree. 
 def insert_treeData(root):
 	no_of_nodes=2000
 	max_int=20000
@@ -138,32 +199,31 @@ def insert_treeData(root):
 
 
 root_node= binary_tree()
-root_node= insert_treeData(root_node)
-'''root_node.insert_value(5)
+#root_node= insert_treeData(root_node)
+root_node.insert_value(10)
+root_node.insert_value(8)
+root_node.insert_value(7)
+root_node.insert_value(9)
+root_node.insert_value(5)
 root_node.insert_value(4)
-root_node.insert_value(6)'''
+root_node.insert_value(6)
+root_node.insert_value(12)
+root_node.insert_value(11)
+root_node.insert_value(13)
+root_node.insert_value(15)
+root_node.insert_value(14)
+root_node.insert_value(16)
 
+print("The tree looks like below.")
 root_node.print_tree()
-
+print("Height of the tree is as below.")
 print(root_node.find_height())
-
-print(root_node.find_element(2121))
-print(root_node.find_element(21))
-print(root_node.find_element(232))
-print(root_node.find_element(12323))
-print(root_node.find_element(3434))
-print(root_node.find_element(1122))
-print(root_node.find_element(2233))
-print(root_node.find_element(6545))
-print(root_node.find_element(2121))
-print(root_node.find_element(5467))
-print(root_node.find_element(11232))
-print(root_node.find_element(7657))
-print(root_node.find_element(789))
-print(root_node.find_element(987))
-print(root_node.find_element(54))
-print(root_node.find_element(87))
-
-
+print("Root of the tree is as below.")
+print(root_node.get_root_node())
+root_node.delete_node(10)
+print("After deleting the node")
+root_node.print_tree()
+print("After deleting the root node becomes")
+print(root_node.get_root_node())
 
 
