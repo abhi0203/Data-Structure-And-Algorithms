@@ -73,34 +73,97 @@ class binary_tree:
 
 		if curr_node.rightChild:
 			self._print_tree(curr_node.rightChild)
-	
+
+	#Function to define the height of the tree.
+	# Here we traverse from root node with a count of the level. 
+	# Then we each travel to left and right node counting the number of levels in recursive manner. 
+	# Once we reach the None value for a node, we return the call.
+
+	def find_height(self):
+		if self.root!= None:
+			return self._find_height(self.root, 0)
+
+	# this is the recursive function. This is where we find the height.
+	# This function takes 2 arguments. 1) Current Node 2) Current height
+	def _find_height(self, current_node, current_height):
+		# First we check if the root node is empty. If it is just return the current value i.e 0
+		if current_node==None:
+			return current_height
+		
+		# If the root is not none, that means there is atleast one element in the tree. 
+		# So the logic we implement is, for each node, we calculate the height for it left and right tree and then add it to the one in the overall tree. 
+		# Here we move to left till we find none.
+		left_height= self._find_height(current_node.leftChild,current_height+1)
+
+		# Same thing we do for the right nodes. So for rach node, we get the height for the right node as well. 
+		# That way we cover all the nodes.
+
+		right_height= self._find_height(current_node.rightChild,current_height+1)
+
+		#Once we find the height of both the nodes, we just find the max and return it.
+		# So we go to deepest node and find the height. At one point, we reach the root node, and return the height of its left or right child.
+
+		return max(left_height, right_height)
+
+	# This is the dunction to search if a value exists in the binary tree. 
+	# Here we will define the private function as well.
 	def find_element(self, value):
-		if self.root==None:
-			return False
+		# First we check if the tree is empty by checking root node. If it is not, then we call private function.
+		# When we call the provate function then we send current node and the value to be searched to the private function.
+		if self.root== None:
+			print("Tree is empty.")
 		else:
 			return self._find_element(self.root, value)
 
 	def _find_element(self, current_node, value):
-		if current_node.value==value:
+		# Check if the value equal to value of current node. If it is then return true. If it is less than current, then traverse to left. 
+		# If it is greater, traverse right. If at any point we encounter None in the child node, return false.
+
+		if current_node.value == value:
 			return True
-		elif value < current_node.value and current_node.left:
-			return self._find_element(current_node.left, value)
-		elif value > current_node.value and current_node.right:
-			return self._find_element(current_node.right, value)
+		elif value < current_node.value and current_node.leftChild:
+			return self._find_element(current_node.leftChild, value)
+		elif value > current_node.value and current_node.rightChild:
+			return self._find_element(current_node.rightChild, value)
 		return False
 
 
 def insert_treeData(root):
-	no_of_nodes=200
-	max_int=2000
+	no_of_nodes=2000
+	max_int=20000
 	for _ in range(no_of_nodes):
 		num= random.randint(0,max_int)
 		root.insert_value(num)
+	return root
 
 
 root_node= binary_tree()
-insert_treeData(root_node)
+root_node= insert_treeData(root_node)
+'''root_node.insert_value(5)
+root_node.insert_value(4)
+root_node.insert_value(6)'''
 
 root_node.print_tree()
+
+print(root_node.find_height())
+
+print(root_node.find_element(2121))
+print(root_node.find_element(21))
+print(root_node.find_element(232))
+print(root_node.find_element(12323))
+print(root_node.find_element(3434))
+print(root_node.find_element(1122))
+print(root_node.find_element(2233))
+print(root_node.find_element(6545))
+print(root_node.find_element(2121))
+print(root_node.find_element(5467))
+print(root_node.find_element(11232))
+print(root_node.find_element(7657))
+print(root_node.find_element(789))
+print(root_node.find_element(987))
+print(root_node.find_element(54))
+print(root_node.find_element(87))
+
+
 
 
