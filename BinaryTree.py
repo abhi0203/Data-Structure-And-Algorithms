@@ -198,6 +198,10 @@ def insert_treeData(root):
 	return root
 
 
+# This is the helper code and needs to be commentd as I am planning to import this module in other codes.
+
+'''
+
 root_node= binary_tree()
 #root_node= insert_treeData(root_node)
 root_node.insert_value(10)
@@ -226,4 +230,4 @@ root_node.print_tree()
 print("After deleting the root node becomes")
 print(root_node.get_root_node())
 
-
+'''
