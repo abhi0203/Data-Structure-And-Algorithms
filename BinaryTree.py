@@ -64,6 +64,8 @@ class binary_tree:
 		# Check if the root node exists. If it does then recursively implement inorder way.
 		if self.root != None:
 			self._print_tree(self.root)
+		else:
+			print("Tree is empty")
 
 	# This is a type of private function for the Inorder traversal.
 	# Here we first move to the leftmost node, then print it and then move to the right most node.
