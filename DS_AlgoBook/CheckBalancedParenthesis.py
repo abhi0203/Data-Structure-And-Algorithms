@@ -25,6 +25,29 @@ def isBalancedParen(brace_string):
 	else:
 		return False
 
+
+def isBalancedParanGeneric(brace_string):
+	s= Stack()
+
+	for char in brace_string:
+		if char in "[({":
+			s.push(char)
+		else:
+			if char in "})]" and not s.isempty():
+				c= s.pop()
+				if "[({".index(c) == "])}".index(char):
+					continue
+				else:
+					return False
+			else: 
+				return False
+	if s.isempty():
+		return True
+	return False
+
+
+
+
 '''
 print(isBalancedParen("()()()"))
 print(isBalancedParen("(()()(()))"))
@@ -32,3 +55,14 @@ print(isBalancedParen("((()"))
 print(isBalancedParen("())()()"))
 print(isBalancedParen("()"))
 print(isBalancedParen(")("))'''
+
+# Test cases for generic parenthesis checking.
+'''
+print(isBalancedParanGeneric("[{()}]"))
+print(isBalancedParanGeneric("[{}()}]"))
+print(isBalancedParanGeneric("[{())}]"))
+print(isBalancedParanGeneric("[]{()}]"))
+print(isBalancedParanGeneric("[{()}][()]{}[]()"))
+'''
+
+
